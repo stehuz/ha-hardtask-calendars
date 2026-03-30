@@ -1,0 +1,32 @@
+name: Validate Integration
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  hacs:
+    runs-on: ubuntu-latest
+    name: HACS Validation
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        
+      - name: Run HACS validation
+        uses: hacs/action@main
+        with:
+          category: integration
+
+  hassfest:
+    runs-on: ubuntu-latest
+    name: Home Assistant Core Validation (Hassfest)
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        
+      - name: Run Hassfest validation
+        uses: home-assistant/actions/hassfest@master
