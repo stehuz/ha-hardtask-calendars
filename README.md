@@ -24,12 +24,12 @@ Want to get a push notification to your phone the second a new free slot opens u
 **For Hardtask Courses (Main Site):**
 1. Go to Settings > Automations & Scenes > Blueprints.
 2. Click **Import Blueprint** and paste this URL:
-`https://raw.githubusercontent.com/YOUR-USERNAME/ha-hardtask-calendars/main/blueprints/hardtask_courses_notifier.yaml`
+`https://raw.githubusercontent.com/stehuz/ha-hardtask-calendars/main/blueprints/hardtask_courses_notifier.yaml`
 
 **For Hardtask Rangers:**
 1. Go to Settings > Automations & Scenes > Blueprints.
 2. Click **Import Blueprint** and paste this URL:
-`https://raw.githubusercontent.com/YOUR-USERNAME/ha-hardtask-calendars/main/blueprints/hardtask_rangers_notifier.yaml`
+`https://raw.githubusercontent.com/stehuz/ha-hardtask-calendars/main/blueprints/hardtask_rangers_notifier.yaml`
 
 ## 📊 Dashboard Markdown
 Add this to a Markdown Card on your dashboard to see your available courses beautifully formatted:
