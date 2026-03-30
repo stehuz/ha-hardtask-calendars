@@ -10,11 +10,12 @@ This custom component scrapes the [Hardtask](https://www.hardtask.cz/) and [Hard
 4. Click **Download**, then restart Home Assistant.
 5. Add the following to your `configuration.yaml`:
 
-\`\`\`yaml
+```yaml
 sensor:
   - platform: hardtask_courses
   - platform: hardtask_rangers
-\`\`\`
+```
+
 6. Restart Home Assistant one last time.
 
 ## 📱 Blueprint Notifications
