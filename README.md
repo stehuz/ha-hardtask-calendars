@@ -55,27 +55,35 @@ Use a Markdown Card to display your courses in a beautiful table:
 ```YAML
 type: markdown
 title: "🛡️ Hardtask: Main Courses"
-content: >-
+content: >
   | Date & Time | Course | Instructor | Location | Price | Slots | Link |
+
   | :--- | :--- | :--- | :--- | :--- | :---: | :---: |
-  {%- for course in state_attr('sensor.hardtask_courses', 'courses') %}
+
+  {% for course in state_attr('sensor.hardtask_courses', 'courses') -%}
+
   | {{ course.date_time }} | {{ course.name }} | {{ course.instructor }} | {{
   course.location }} | {{ course.price }} | **{{ course.free_slots }}** |
   [Register]({{ course.url }}) |
-  {%- endfor %}
+
+  {% endfor %}
 ```
 2. Markdown Card: Hardtask Rangers (Trainings)
 ```YAML
 type: markdown
 title: "🎯 Hardtask: Rangers Trainings"
-content: >-
+content: >
   | Date & Time | Training | Instructor | Location | Price | Slots | Link |
+
   | :--- | :--- | :--- | :--- | :--- | :---: | :---: |
-  {%- for course in state_attr('sensor.hardtask_rangers', 'courses') %}
+
+  {% for course in state_attr('sensor.hardtask_rangers', 'courses') -%}
+
   | {{ course.date_time }} | {{ course.name }} | {{ course.instructor }} | {{
   course.location }} | {{ course.price }} | **{{ course.free_slots }}** |
   [Register]({{ course.url }}) |
-  {%- endfor %}
+
+  {% endfor %}
 ```
 
 🛠️ Troubleshooting
