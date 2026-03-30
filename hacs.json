@@ -1,0 +1,6 @@
+{
+  "name": "Hardtask Calendars (Courses & Rangers)",
+  "render_readme": true,
+  "iot_class": "Cloud Polling",
+  "version": "1.0.0"
+}
