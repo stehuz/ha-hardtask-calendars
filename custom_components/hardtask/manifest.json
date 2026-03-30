@@ -2,10 +2,10 @@
   "domain": "hardtask",
   "name": "Hardtask Calendars",
   "codeowners": ["@stehuz"],
-  "version": "1.0.2",
-  "iot_class": "cloud_polling",
-  "documentation": "https://github.com/stehuz/ha-hardtask",
-  "issue_tracker": "https://github.com/stehuz/ha-hardtask/issues",
   "config_flow": true,
-  "requirements": ["beautifulsoup4>=4.12.3,<5.0.0"]
+  "documentation": "https://github.com/stehuz/ha-hardtask",
+  "iot_class": "cloud_polling",  
+  "issue_tracker": "https://github.com/stehuz/ha-hardtask/issues",
+  "requirements": ["beautifulsoup4>=4.12.3,<5.0.0"],
+  "version": "1.0.2"
 }
