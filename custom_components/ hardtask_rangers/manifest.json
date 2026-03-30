@@ -1,8 +1,0 @@
-{
-  "domain": "hardtask_rangers",
-  "name": "Hardtask Rangers Calendar",
-  "version": "1.0.0",
-  "requirements": ["beautifulsoup4==4.12.3"],
-  "dependencies": [],
-  "codeowners": []
-}

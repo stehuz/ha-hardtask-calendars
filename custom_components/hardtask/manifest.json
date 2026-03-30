@@ -1,0 +1,11 @@
+{
+  "domain": "hardtask",
+  "name": "Hardtask Calendars",
+  "codeowners": ["@stehuz"],
+  "dependencies": [],
+  "documentation": "https://github.com/stehuz/ha-hardtask",
+  "iot_class": "cloud_polling",
+  "issue_tracker": "https://github.com/stehuz/ha-hardtask/issues",
+  "requirements": ["beautifulsoup4>=4.12.3,<5.0.0"],
+  "version": "1.0.1"
+}
