@@ -1,63 +1,41 @@
 blueprint:
-  name: "Hardtask Courses: New Notifier"
+  name: "Notify: Hardtask Courses"
   description: "Alerts you when a new course on the main Hardtask site has free slots."
   domain: automation
   input:
     hardtask_sensor:
       name: Hardtask Courses Sensor
-      description: "Select your custom sensor from the dropdown."
+      default: sensor.hardtask_courses
       selector:
         entity:
           domain: sensor
-          # This filter now works perfectly because of your new manifest.json!
-          integration: hardtask_courses 
+          integration: hardtask
     notify_device:
       name: Phone to Notify
-      description: Select your mobile phone.
       selector:
         device:
           integration: mobile_app
 
 mode: single
-
 trigger:
   - platform: state
     entity_id: !input hardtask_sensor
-
 condition:
   - condition: template
-    value_template: >
-      {{ trigger.from_state is not none and 
-         trigger.to_state is not none and 
-         trigger.from_state.attributes.courses is defined and
-         trigger.to_state.attributes.courses is defined }}
-
+    value_template: "{{ trigger.from_state is not none and trigger.to_state is not none }}"
 action:
   - variables:
-      old_ids: >
-        {{ trigger.from_state.attributes.courses | map(attribute='id') | list }}
-      new_courses: >
-        {{ trigger.to_state.attributes.courses | rejectattr('id', 'in', old_ids) | list }}
-        
+      old_ids: "{{ trigger.from_state.attributes.courses | map(attribute='id') | list }}"
+      new_courses: "{{ trigger.to_state.attributes.courses | rejectattr('id', 'in', old_ids) | list }}"
   - condition: template
     value_template: "{{ new_courses | length > 0 }}"
-    
   - domain: mobile_app
     type: notify
     device_id: !input notify_device
-    title: "🛡️ New Hardtask Course Available!"
+    title: "🛡️ New Hardtask Course!"
     message: >
-      {% for course in new_courses %}
-      {{ course.date_time }} | {{ course.name }}
-      Instruktor: {{ course.instructor }}
-      Místo: {{ course.location }}
-      Cena: {{ course.price }}
-      Volno: {{ course.free_slots }}
-      
-      Link: {{ course.url }}
-      {% if not loop.last %}
+      {% for c in new_courses %}{{ c.date_time }} | {{ c.name }}
+      Location: {{ c.location }} | Slots: {{ c.free_slots }}
+      Link: {{ c.url }}{% if not loop.last %}
       ---
-      {% endif %}
-      {% endfor %}
-    data:
-      clickAction: "{{ new_courses[0].url }}"
+      {% endif %}{% endfor %}
