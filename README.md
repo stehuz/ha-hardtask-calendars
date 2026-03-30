@@ -1,55 +1,49 @@
-🎯 Hardtask Calendars for Home Assistant
-A unified Home Assistant integration that tracks available courses and training sessions from both Hardtask and Hardtask Rangers. It automatically monitors free slots and provides detailed course information (instructors, location, price) directly in your dashboard.
+# 🛡️ Hardtask Calendars for Home Assistant
 
-✨ Features
-Two-in-One: Monitors both Hardtask.cz and HardtaskRangers.cz.
+A custom Home Assistant integration that monitors upcoming firearms training courses and events from [Hardtask.cz](https://www.hardtask.cz/) and [HardtaskRangers.cz](https://www.hardtaskrangers.cz/). 
 
-Automatic Filtering: Easily exclude specific locations (like "Příbram") via your configuration.
+Built for modern Home Assistant standards, this integration uses a clean UI setup (Config Flow) and completely replaces legacy YAML configurations.
 
-Rich Attributes: Each sensor provides a full list of available courses with direct registration links.
+## ✨ Features
+* **Dual Monitoring:** Creates separate sensors for Main Courses and Rangers Trainings.
+* **UI Configuration:** Set up entirely via the Home Assistant UI.
+* **Location Filtering:** Exclude specific locations (e.g., Příbram, Ostrava) directly in the setup wizard.
+* **Rich Attributes:** Stores full course details (date, instructor, location, price, available slots, and registration links) in the sensor attributes.
+* **HACS Compatible:** Fully structured for installation via the Home Assistant Community Store.
 
-Push Notifications: Includes blueprints to alert your phone the moment a new slot opens up.
+## 📦 Installation
 
-🚀 Installation
-1. Via HACS (Recommended)
-Open HACS in your Home Assistant.
+### HACS (Recommended)
+1. Open HACS in Home Assistant.
+2. Click the 3 dots in the top right corner and select **Custom repositories**.
+3. Add the URL to this repository and select **Integration** as the category.
+4. Click **Download**.
+5. Restart Home Assistant.
 
-Click the three dots in the top right and select Custom repositories.
+### Manual Installation
+1. Download the `hardtask` folder from this repository.
+2. Copy the folder into your `config/custom_components/` directory.
+3. Restart Home Assistant.
 
-Paste: https://github.com/stehuz/ha-hardtask
+## ⚙️ Configuration
+This integration is configured via the UI. **Do not add it to your `configuration.yaml`.**
 
-Select Integration as the category and click Add.
+1. Go to **Settings > Devices & Services**.
+2. Click **+ Add Integration** in the bottom right corner.
+3. Search for **Hardtask**.
+4. In the configuration prompt, enter any locations you wish to filter out, separated by commas (e.g., `Příbram, Ostrava`). Leave blank to include all locations.
+5. Click **Submit**.
 
-Click Download, then Restart Home Assistant.
+## 📊 Provided Entities
+The integration creates two sensors that update every 10 minutes:
 
-2. Manual Installation
-Copy the custom_components/hardtask/ folder into your Home Assistant config/custom_components/ directory.
+* `sensor.hardtask_courses` - Shows the total count of available Main Courses.
+* `sensor.hardtask_rangers` - Shows the total count of available Rangers Trainings.
 
-Restart Home Assistant.
+Both sensors contain a `courses` attribute, which is an array of dictionaries containing the parsed data for each available event.
 
-⚙️ Configuration
-Add the following to your configuration.yaml file. You can optionally use exclude_locations to filter out training sites you don't want to see.
-
-```YAML
-sensor:
-  - platform: hardtask
-    exclude_locations:
-      - "Příbram"
-      - "Ostrava"
-```
-Note: The filter is case-insensitive and handles accents (diacritics) automatically. If a location contains your excluded word, it will be hidden.
-
-📱 Blueprints (Notifications)
-Get a notification on your phone the second a course becomes available. Import these directly into Home Assistant by pasting these URLs into the "Import Blueprint" section:
-
-Hardtask Courses (Main Site):
-https://github.com/stehuz/ha-hardtask/blob/main/blueprints/notify_courses.yaml
-
-Hardtask Rangers:
-https://github.com/stehuz/ha-hardtask/blob/main/blueprints/notify_rangers.yaml
-
-📊 Dashboard Display
-Use a Markdown Card to display your courses in a beautiful table:
+## 💻 Dashboard Configuration
+You can display the available courses in a clean grid using standard Markdown cards. Add the following YAML to your dashboard.
 
 1. Markdown Card: Hardtask Courses (Main Site)
 ```YAML
@@ -86,11 +80,17 @@ content: >
   {% endfor %}
 ```
 
+📱 Blueprints (Notifications)
+Get a notification on your phone the second a course becomes available. Import these directly into Home Assistant by pasting these URLs into the "Import Blueprint" section:
+
+Hardtask Courses (Main Site):
+https://github.com/stehuz/ha-hardtask/blob/main/blueprints/notify_courses.yaml
+
+Hardtask Rangers:
+https://github.com/stehuz/ha-hardtask/blob/main/blueprints/notify_rangers.yaml
+
 🛠️ Troubleshooting
 If the sensors show 0 or Unknown:
-
 Check your home-assistant.log for any errors related to hardtask.
-
 Ensure you have beautifulsoup4 installed (it should be handled automatically).
-
 Open an issue on this repository if the website layout has changed.
