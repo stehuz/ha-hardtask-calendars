@@ -49,43 +49,32 @@ Hardtask Rangers:
 https://github.com/stehuz/ha-hardtask/blob/main/blueprints/notify_rangers.yaml
 
 📊 Dashboard Display
-Use a Markdown Card to display your courses in a beautiful table. This example merges both sensors into one unified list:
+Use a Markdown Card to display your courses in a beautiful table:
 
-```YAML
-type: markdown
-title: "🛡️ Available Hardtask Training"
-content: >
-  | Date | Course | Instructor | Location | Slots | Link |
-  | :--- | :--- | :--- | :--- | :---: | :---: |
-  {% set all = state_attr('sensor.hardtask_courses', 'courses') + state_attr('sensor.hardtask_rangers', 'courses') %}
-  {% for c in all %}
-  | {{ c.date_time }} | **{{ c.name }}** | {{ c.instructor }} | {{ c.location }} | **{{ c.free_slots }}** | [Link]({{ c.url }}) |
-  {% endfor %}
-```
-
-**Or you can split it by following Markdown cards**
 1. Markdown Card: Hardtask Courses (Main Site)
 ```YAML
 type: markdown
 title: "🛡️ Hardtask: Main Courses"
-content: >
+content: >-
   | Date & Time | Course | Instructor | Location | Price | Slots | Link |
   | :--- | :--- | :--- | :--- | :--- | :---: | :---: |
   {%- for course in state_attr('sensor.hardtask_courses', 'courses') %}
-  {%- set f = ('Gregory' in course.instructor or 'Hámorská' in course.instructor) %}
-  | {% if f %}<font color="#4CAF50">**{{ course.date_time }}**</font>{% else %}{{ course.date_time }}{% endif %} | {% if f %}<font color="#4CAF50">**{{ course.name }}**</font>{% else %}{{ course.name }}{% endif %} | {% if f %}<font color="#4CAF50">**{{ course.instructor }}**</font>{% else %}{{ course.instructor }}{% endif %} | {% if f %}<font color="#4CAF50">**{{ course.location }}**</font>{% else %}{{ course.location }}{% endif %} | {% if f %}<font color="#4CAF50">**{{ course.price }}**</font>{% else %}{{ course.price }}{% endif %} | {% if f %}<font color="#4CAF50">**{{ course.free_slots }}**</font>{% else %}**{{ course.free_slots }}**{% endif %} | {% if f %}[<font color="#4CAF50">**Register**</font>]({{ course.url }}){% else %}[Register]({{ course.url }}){% endif %} |
+  | {{ course.date_time }} | {{ course.name }} | {{ course.instructor }} | {{
+  course.location }} | {{ course.price }} | **{{ course.free_slots }}** |
+  [Register]({{ course.url }}) |
   {%- endfor %}
 ```
 2. Markdown Card: Hardtask Rangers (Trainings)
 ```YAML
 type: markdown
 title: "🎯 Hardtask: Rangers Trainings"
-content: >
+content: >-
   | Date & Time | Training | Instructor | Location | Price | Slots | Link |
   | :--- | :--- | :--- | :--- | :--- | :---: | :---: |
   {%- for course in state_attr('sensor.hardtask_rangers', 'courses') %}
-  {%- set f = ('Gregory' in course.instructor or 'Hámorská' in course.instructor) %}
-  | {% if f %}<font color="#4CAF50">**{{ course.date_time }}**</font>{% else %}{{ course.date_time }}{% endif %} | {% if f %}<font color="#4CAF50">**{{ course.name }}**</font>{% else %}{{ course.name }}{% endif %} | {% if f %}<font color="#4CAF50">**{{ course.instructor }}**</font>{% else %}{{ course.instructor }}{% endif %} | {% if f %}<font color="#4CAF50">**{{ course.location }}**</font>{% else %}{{ course.location }}{% endif %} | {% if f %}<font color="#4CAF50">**{{ course.price }}**</font>{% else %}{{ course.price }}{% endif %} | {% if f %}<font color="#4CAF50">**{{ course.free_slots }}**</font>{% else %}**{{ course.free_slots }}**{% endif %} | {% if f %}[<font color="#4CAF50">**Register**</font>]({{ course.url }}){% else %}[Register]({{ course.url }}){% endif %} |
+  | {{ course.date_time }} | {{ course.name }} | {{ course.instructor }} | {{
+  course.location }} | {{ course.price }} | **{{ course.free_slots }}** |
+  [Register]({{ course.url }}) |
   {%- endfor %}
 ```
 
