@@ -62,9 +62,9 @@ content: >
   | {{ c.date_time }} | **{{ c.name }}** | {{ c.instructor }} | {{ c.location }} | **{{ c.free_slots }}** | [Link]({{ c.url }}) |
   {% endfor %}
 ```
-Or you can split it by following Markdown cards
 
-Markdown Card: Hardtask Courses (Main Site)
+**Or you can split it by following Markdown cards**
+1. Markdown Card: Hardtask Courses (Main Site)
 ```YAML
 type: markdown
 title: "🛡️ Hardtask: Main Courses"
