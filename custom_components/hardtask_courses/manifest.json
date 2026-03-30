@@ -1,0 +1,8 @@
+{
+  "domain": "hardtask_courses",
+  "name": "Hardtask Courses",
+  "version": "1.0.0",
+  "requirements": ["beautifulsoup4==4.12.3"],
+  "dependencies": [],
+  "codeowners": []
+}
