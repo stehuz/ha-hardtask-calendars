@@ -1,36 +1,99 @@
-# 🎯 Hardtask Calendars for Home Assistant
+🎯 Hardtask Calendars for Home Assistant
+A unified Home Assistant integration that tracks available courses and training sessions from both Hardtask and Hardtask Rangers. It automatically monitors free slots and provides detailed course information (instructors, location, price) directly in your dashboard.
 
-This custom component scrapes the [Hardtask](https://www.hardtask.cz/) and [Hardtask Rangers](https://www.hardtaskrangers.cz/) websites to track available training courses and free slots directly in Home Assistant.
+✨ Features
+Two-in-One: Monitors both Hardtask.cz and HardtaskRangers.cz.
 
-## ⚙️ Installation via HACS
+Automatic Filtering: Easily exclude specific locations (like "Příbram") via your configuration.
 
-1. Open HACS in your Home Assistant.
-2. Click the three dots in the top right corner and select **Custom repositories**.
-3. Paste the URL of this repository and select **Integration** as the category.
-4. Click **Download**, then restart Home Assistant.
-5. Add the following to your `configuration.yaml`:
+Rich Attributes: Each sensor provides a full list of available courses with direct registration links.
 
-```yaml
+Push Notifications: Includes blueprints to alert your phone the moment a new slot opens up.
+
+🚀 Installation
+1. Via HACS (Recommended)
+Open HACS in your Home Assistant.
+
+Click the three dots in the top right and select Custom repositories.
+
+Paste: https://github.com/stehuz/ha-hardtask
+
+Select Integration as the category and click Add.
+
+Click Download, then Restart Home Assistant.
+
+2. Manual Installation
+Copy the custom_components/hardtask/ folder into your Home Assistant config/custom_components/ directory.
+
+Restart Home Assistant.
+
+⚙️ Configuration
+Add the following to your configuration.yaml file. You can optionally use exclude_locations to filter out training sites you don't want to see.
+
+```YAML
 sensor:
-  - platform: hardtask_courses
-  - platform: hardtask_rangers
+  - platform: hardtask
+    exclude_locations:
+      - "Příbram"
+      - "Ostrava"
+```
+Note: The filter is case-insensitive and handles accents (diacritics) automatically. If a location contains your excluded word, it will be hidden.
+
+📱 Blueprints (Notifications)
+Get a notification on your phone the second a course becomes available. Import these directly into Home Assistant by pasting these URLs into the "Import Blueprint" section:
+
+Hardtask Courses (Main Site):
+https://github.com/stehuz/ha-hardtask/blob/main/blueprints/notify_courses.yaml
+
+Hardtask Rangers:
+https://github.com/stehuz/ha-hardtask/blob/main/blueprints/notify_rangers.yaml
+
+📊 Dashboard Display
+Use a Markdown Card to display your courses in a beautiful table. This example merges both sensors into one unified list:
+
+```YAML
+type: markdown
+title: "🛡️ Available Hardtask Training"
+content: >
+  | Date | Course | Instructor | Location | Slots | Link |
+  | :--- | :--- | :--- | :--- | :---: | :---: |
+  {% set all = state_attr('sensor.hardtask_courses', 'courses') + state_attr('sensor.hardtask_rangers', 'courses') %}
+  {% for c in all %}
+  | {{ c.date_time }} | **{{ c.name }}** | {{ c.instructor }} | {{ c.location }} | **{{ c.free_slots }}** | [Link]({{ c.url }}) |
+  {% endfor %}
+```
+Or you can split it by following Markdown cards
+
+Markdown Card: Hardtask Courses (Main Site)
+```YAML
+type: markdown
+title: "🛡️ Hardtask: Main Courses"
+content: >
+  | Date & Time | Course | Instructor | Location | Price | Slots | Link |
+  | :--- | :--- | :--- | :--- | :--- | :---: | :---: |
+  {%- for course in state_attr('sensor.hardtask_courses', 'courses') %}
+  {%- set f = ('Gregory' in course.instructor or 'Hámorská' in course.instructor) %}
+  | {% if f %}<font color="#4CAF50">**{{ course.date_time }}**</font>{% else %}{{ course.date_time }}{% endif %} | {% if f %}<font color="#4CAF50">**{{ course.name }}**</font>{% else %}{{ course.name }}{% endif %} | {% if f %}<font color="#4CAF50">**{{ course.instructor }}**</font>{% else %}{{ course.instructor }}{% endif %} | {% if f %}<font color="#4CAF50">**{{ course.location }}**</font>{% else %}{{ course.location }}{% endif %} | {% if f %}<font color="#4CAF50">**{{ course.price }}**</font>{% else %}{{ course.price }}{% endif %} | {% if f %}<font color="#4CAF50">**{{ course.free_slots }}**</font>{% else %}**{{ course.free_slots }}**{% endif %} | {% if f %}[<font color="#4CAF50">**Register**</font>]({{ course.url }}){% else %}[Register]({{ course.url }}){% endif %} |
+  {%- endfor %}
+```
+2. Markdown Card: Hardtask Rangers (Trainings)
+```YAML
+type: markdown
+title: "🎯 Hardtask: Rangers Trainings"
+content: >
+  | Date & Time | Training | Instructor | Location | Price | Slots | Link |
+  | :--- | :--- | :--- | :--- | :--- | :---: | :---: |
+  {%- for course in state_attr('sensor.hardtask_rangers', 'courses') %}
+  {%- set f = ('Gregory' in course.instructor or 'Hámorská' in course.instructor) %}
+  | {% if f %}<font color="#4CAF50">**{{ course.date_time }}**</font>{% else %}{{ course.date_time }}{% endif %} | {% if f %}<font color="#4CAF50">**{{ course.name }}**</font>{% else %}{{ course.name }}{% endif %} | {% if f %}<font color="#4CAF50">**{{ course.instructor }}**</font>{% else %}{{ course.instructor }}{% endif %} | {% if f %}<font color="#4CAF50">**{{ course.location }}**</font>{% else %}{{ course.location }}{% endif %} | {% if f %}<font color="#4CAF50">**{{ course.price }}**</font>{% else %}{{ course.price }}{% endif %} | {% if f %}<font color="#4CAF50">**{{ course.free_slots }}**</font>{% else %}**{{ course.free_slots }}**{% endif %} | {% if f %}[<font color="#4CAF50">**Register**</font>]({{ course.url }}){% else %}[Register]({{ course.url }}){% endif %} |
+  {%- endfor %}
 ```
 
-6. Restart Home Assistant one last time.
+🛠️ Troubleshooting
+If the sensors show 0 or Unknown:
 
-## 📱 Blueprint Notifications
-Want to get a push notification to your phone the second a new free slot opens up? Import the official blueprints directly into your Home Assistant:
+Check your home-assistant.log for any errors related to hardtask.
 
-**For Hardtask Courses (Main Site):**
-1. Go to Settings > Automations & Scenes > Blueprints.
-2. Click **Import Blueprint** and paste this URL:
-`https://raw.githubusercontent.com/stehuz/ha-hardtask-calendars/main/blueprints/hardtask_courses_notifier.yaml`
+Ensure you have beautifulsoup4 installed (it should be handled automatically).
 
-**For Hardtask Rangers:**
-1. Go to Settings > Automations & Scenes > Blueprints.
-2. Click **Import Blueprint** and paste this URL:
-`https://raw.githubusercontent.com/stehuz/ha-hardtask-calendars/main/blueprints/hardtask_rangers_notifier.yaml`
-
-## 📊 Dashboard Markdown
-Add this to a Markdown Card on your dashboard to see your available courses beautifully formatted:
-*(Paste your Lovelace Markdown code here!)*
+Open an issue on this repository if the website layout has changed.
