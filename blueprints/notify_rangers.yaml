@@ -1,6 +1,6 @@
 blueprint:
-  name: "Notify: Hardtask Rangers"
-  description: "Alerts you when a new training on the Rangers site has free slots."
+  name: 'Notify: Hardtask Rangers'
+  description: Alerts you when a new training on the Rangers site has free slots.
   domain: automation
   input:
     hardtask_sensor:
@@ -8,34 +8,40 @@ blueprint:
       default: sensor.hardtask_rangers
       selector:
         entity:
-          domain: sensor
+          domain:
+          - sensor
           integration: hardtask
+          multiple: false
+          reorder: false
     notify_device:
       name: Phone to Notify
       selector:
         device:
           integration: mobile_app
-
+          multiple: false
+  source_url: https://github.com/stehuz/ha-hardtask/blob/main/blueprints/notify_rangers.yaml
 mode: single
 trigger:
-  - platform: state
-    entity_id: !input hardtask_sensor
+- platform: state
+  entity_id: !input hardtask_sensor
 condition:
-  - condition: template
-    value_template: "{{ trigger.from_state is not none and trigger.to_state is not none }}"
+- condition: template
+  value_template: '{{ trigger.from_state is not none and trigger.to_state is not none
+    }}'
 action:
-  - variables:
-      old_ids: "{{ trigger.from_state.attributes.courses | map(attribute='id') | list }}"
-      new_courses: "{{ trigger.to_state.attributes.courses | rejectattr('id', 'in', old_ids) | list }}"
-  - condition: template
-    value_template: "{{ new_courses | length > 0 }}"
-  - domain: mobile_app
-    type: notify
-    device_id: !input notify_device
-    title: "🎯 New Rangers Training!"
-    message: >
-      {% for c in new_courses %}{{ c.date_time }} | {{ c.name }}
-      Location: {{ c.location }} | Slots: {{ c.free_slots }}
-      Link: {{ c.url }}{% if not loop.last %}
-      ---
-      {% endif %}{% endfor %}
+- variables:
+    old_ids: '{{ trigger.from_state.attributes.courses | map(attribute=''id'') | list
+      }}'
+    new_courses: '{{ trigger.to_state.attributes.courses | rejectattr(''id'', ''in'',
+      old_ids) | list }}'
+- condition: template
+  value_template: '{{ new_courses | length > 0 }}'
+- domain: mobile_app
+  type: notify
+  device_id: !input notify_device
+  title: "\U0001F3AF New Rangers Training!"
+  message: '{% for c in new_courses %}{{ c.date_time }} | {{ c.name }} Location: {{
+    c.location }} | Slots: {{ c.free_slots }} Link: {{ c.url }}{% if not loop.last
+    %} --- {% endif %}{% endfor %}
+
+    '
